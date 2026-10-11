@@ -1,0 +1,19 @@
+{
+  "name": "turia-agent-center-backend",
+  "version": "0.1.0",
+  "description": "Express + SQLite REST API for the Turia Agent Center MVP",
+  "main": "src/server.js",
+  "private": true,
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "test": "node --test"
+  },
+  "engines": { "node": ">=18" },
+  "dependencies": {
+    "better-sqlite3": "^11.0.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

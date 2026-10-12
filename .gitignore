@@ -7,3 +7,8 @@ backend/data/*.db-shm
 backend/data/*.db-wal
 coverage/
 .DS_Store
+
+# Local-only reference assets
+task_screenshot/
+dsc-license-screens/
+*.mp4

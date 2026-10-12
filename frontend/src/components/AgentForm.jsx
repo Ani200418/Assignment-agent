@@ -155,18 +155,21 @@ function FormBody({ defs, agent }) {
   const aria = (key) => ({ 'aria-invalid': errors[key] ? true : undefined, 'aria-describedby': errors[key] ? `${key}-error` : undefined });
 
   return (
-    <div className="mx-auto max-w-3xl">
-      <Link href={editing ? `/agents/${agent.id}` : '/agent-center'} className="text-sm font-medium text-slate-500 hover:text-violet-700">
-        ← Back to {editing ? 'agent' : 'Agent Center'}
-      </Link>
-      <div className="mb-7 mt-4">
-        <p className="text-sm font-semibold text-violet-700">AGENT BUILDER</p>
-        <h1 className="mt-2 text-3xl font-bold">{editing ? 'Edit draft agent' : 'Create an agent'}</h1>
-        <p className="mt-2 text-slate-500">Configure when this agent runs and what it should do.</p>
+    <div className="builder-canvas">
+      <div className="builder-header">
+        <Link href={editing ? `/agents/${agent.id}` : '/agent-center'} className="crumb">Agent Center&nbsp; › &nbsp;Task&nbsp; › &nbsp;Create Agents</Link>
+        <h1>Task Agents</h1>
+        <div className="builder-actions"><button type="button" onClick={() => save(false)}>▣&nbsp; Save Draft</button><button type="button" onClick={() => document.getElementById('message-preview')?.scrollIntoView({ behavior: 'smooth' })}>◉&nbsp; Preview</button><button type="button" onClick={() => save(true)}>↥&nbsp; Publish</button></div>
+      </div>
+      <div className="workflow-row">
+        <div className="workflow-node event"><div className="node-label">⚡ EVENT</div><strong>{triggerDef?.value || 'Select Event'}</strong><p>{triggerDef ? 'When: ' + triggerDef.value : 'Click to choose a trigger event'}</p></div>
+        <div className="workflow-node recipient"><div className="node-label">♧ RECIPIENT</div><strong>{form.recipient || 'Select Recipients'}</strong><p>Notification targets</p></div>
+        <div className="workflow-node channel"><div className="node-label">✓ CHANNEL</div><strong>{form.channel || 'Select Channel'}</strong><p>Delivery channel</p></div>
+        <div className="workflow-node action"><div className="node-label">◎ ACTION</div><strong>{form.action ? 'Configure Action' : 'Configure Action'}</strong><p>Click to write the message</p></div>
       </div>
       {formError && <div role="alert" className="mb-5 rounded-xl bg-rose-50 p-3 text-sm text-rose-700">{formError}</div>}
 
-      <form noValidate onSubmit={(e) => { e.preventDefault(); save(false); }} className="space-y-5">
+      <form noValidate onSubmit={(e) => { e.preventDefault(); save(false); }} className="workflow-form space-y-5">
         <section className={CARD}>
           <h2 className="font-bold">1. Basic details</h2>
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -240,7 +243,7 @@ function FormBody({ defs, agent }) {
             <textarea rows={4} value={form.message} onChange={(e) => set('message', e.target.value)} className={FIELD} {...aria('message')} />
             <FieldError id="message-error" message={errors.message} />
           </label>
-          <div className="mt-4 rounded-xl border border-dashed border-violet-200 bg-violet-50/50 p-4" aria-live="polite">
+          <div id="message-preview" className="mt-4 rounded-xl border border-dashed border-violet-200 bg-violet-50/50 p-4" aria-live="polite">
             <p className="text-xs font-bold uppercase tracking-wide text-violet-700">Preview</p>
             <p className="mt-2 whitespace-pre-wrap break-words text-sm">{form.message || '—'}</p>
             <p className="mt-3 text-xs text-slate-500">

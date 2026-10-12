@@ -1,5 +1,54 @@
 @import "tailwindcss";
-:root { color-scheme: light; }
+:root { color-scheme: light; --violet:#7656df; --ink:#25252d; --line:#e8e7ed; }
 * { box-sizing: border-box; }
-body { margin: 0; background: #f7f8fc; color: #182230; font-family: Arial, Helvetica, sans-serif; }
+body { margin: 0; background: #fff; color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
 button, input, select, textarea { font: inherit; }
+.turia-app { min-width: 1040px; }
+.turia-topbar { height:61px; display:flex; align-items:center; gap:22px; padding:0 32px; border-bottom:1px solid var(--line); background:#fff; font-size:14px; white-space:nowrap; }
+.turia-brand { display:flex; align-items:center; gap:9px; width:188px; font-weight:600; }
+.turia-brand-mark { display:grid; place-items:center; width:30px; height:30px; border-radius:8px; color:#fff; background:#7151db; font-size:19px; }
+.turia-product-nav { display:flex; align-items:center; gap:22px; height:100%; color:#303038; }
+.turia-product-nav span { position:relative; display:flex; align-items:center; height:100%; }
+.turia-product-nav span.active { color:var(--violet); font-weight:700; border-bottom:3px solid var(--violet); }
+.turia-product-nav b { position:absolute; top:8px; right:-10px; min-width:16px; height:16px; border-radius:9px; background:#dc4c5b; color:#fff; text-align:center; font-size:10px; line-height:16px; }
+.turia-top-actions { margin-left:auto; display:flex; align-items:center; gap:15px; color:#34343b; }
+.turia-timer { border:1px solid #f4bbc4; border-radius:18px; padding:8px 13px; color:#d85c70; background:#fff5f6; font-weight:600; }
+.turia-search { border:1px solid var(--line); border-radius:18px; padding:8px 13px; color:#8a8990; }
+.turia-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; color:#5bba9a; background:#e9f7f2; font-size:12px; font-weight:700; }
+.turia-rail { position:fixed; top:61px; bottom:0; left:0; width:90px; border-right:1px solid var(--line); background:#fff; display:flex; flex-direction:column; align-items:center; padding-top:12px; z-index:2; }
+.turia-rail span { width:74px; height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#50505a; }
+.turia-rail span i { font-style:normal; font-size:18px; color:#77747e; }
+.turia-rail small { max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:600; }
+.turia-rail .rail-active { color:var(--violet); background:#f4f0ff; border-radius:7px; }
+.turia-main { margin-left:90px; min-height:calc(100vh - 61px); padding:14px 14px 50px; }
+.turia-main > div { max-width:none !important; }
+.agent-overview .eyebrow { display:none; }
+.agent-overview h1 { font-size:22px; margin:0; }
+.agent-overview .subtitle { margin:2px 0 0; color:#68666d; font-size:14px; }
+.agent-tabs { border-bottom:2px solid #ecebf0; margin-top:20px; display:flex; gap:23px; }
+.agent-tabs span { padding:0 10px 10px; font-size:16px; }
+.agent-tabs .selected { color:var(--violet); border-bottom:2px solid var(--violet); }
+.module-table { margin-top:15px; border:1px solid #eeeef2; border-radius:7px; overflow:hidden; box-shadow:0 1px 4px #00000008; }
+.module-table table { width:100%; border-collapse:collapse; }
+.module-table th { padding:21px 17px; text-align:left; font-size:14px; }
+.module-table td { padding:18px 17px; border-top:1px solid #f0eff3; color:#66656c; }
+.module-table td:first-child { color:#34333a; font-weight:700; }
+.module-table .module-icon { display:inline-grid; place-items:center; width:38px; height:38px; margin-right:10px; border-radius:5px; background:#f0edff; color:var(--violet); vertical-align:middle; }
+.module-table .active-pill { color:#54bf72; background:#eaf9ee; border-radius:12px; padding:6px 10px; font-size:12px; font-weight:700; }
+.module-table .add-agent { color:var(--violet); font-weight:600; }
+.module-footer { display:flex; justify-content:space-between; align-items:center; padding:10px 9px; border-top:1px solid #eeeef2; color:#77757d; font-size:12px; }
+.builder-canvas { min-height:760px; margin:-14px; padding:0 20px; background-color:#fff; background-image:radial-gradient(#e9e7ee 1px,transparent 1px); background-size:28px 28px; }
+.builder-header { height:82px; margin:0 -20px; padding:16px 24px; background:#fff; border-bottom:1px solid var(--line); }
+.builder-header h1 { margin:4px 0 0; font-size:20px; }
+.builder-header .crumb { color:var(--violet); font-size:13px; }
+.builder-actions { float:right; margin-top:-42px; display:flex; gap:10px; }
+.builder-actions button { padding:10px 18px; border:1px solid #dfdce9; border-radius:4px; background:#fff; font-weight:700; color:#66636d; }
+.builder-actions button:last-child { background:#795be1; color:#fff; border-color:#795be1; }
+.workflow-row { display:flex; align-items:center; gap:0; padding:20px 120px 0; }
+.workflow-node { position:relative; width:250px; min-height:118px; padding:18px; border:2px solid; border-radius:14px; background:#fff; box-shadow:0 2px 8px #00000012; }
+.workflow-node.event { border-color:#eeb16c; }.workflow-node.recipient { border-color:#8a75df; }.workflow-node.channel { border-color:#7bd894; }.workflow-node.action { border-color:#79cad2; }
+.workflow-node:not(:last-child)::after { content:""; position:absolute; top:57px; left:248px; width:100px; border-top:2px dashed #8d78e0; }
+.workflow-node .node-label { color:#77717a; font-size:12px; font-weight:700; letter-spacing:1px; }
+.workflow-node strong { display:block; margin-top:14px; font-size:16px; }.workflow-node p { margin:5px 0 0; color:#98969d; font-size:13px; }
+.workflow-form { max-width:1080px !important; margin:38px auto 0 !important; }
+.workflow-form > section { border-radius:8px; box-shadow:0 2px 9px #00000012; }

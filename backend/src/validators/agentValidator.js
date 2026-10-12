@@ -83,4 +83,30 @@ function validateAgent(input) {
   };
 }
 
-module.exports = { validateAgent, validateConfig, MODULES, STATUSES, LIMITS };
+// Drafts may intentionally contain only the steps completed so far. This is
+// separate from validateAgent because publish and test-run must remain strict.
+function validateDraftAgent(input) {
+  if (!isPlainObject(input)) return { valid: false, errors: ['Request body must be a JSON object.'], value: null };
+  const errors = [];
+  if (isBlank(input.name)) errors.push('Name is required.');
+  else if (input.name.trim().length > LIMITS.name) errors.push(`Name must be ${LIMITS.name} characters or fewer.`);
+  if (!MODULES.includes(input.module)) errors.push('Module must be Task, DSC, or License.');
+  if (input.description !== undefined && input.description !== null) {
+    if (typeof input.description !== 'string') errors.push('Description must be text.');
+    else if (input.description.trim().length > LIMITS.description) errors.push(`Description must be ${LIMITS.description} characters or fewer.`);
+  }
+  if (!isPlainObject(input.config)) errors.push('Configuration is required.');
+  if (errors.length) return { valid: false, errors, value: null };
+  return {
+    valid: true,
+    errors: [],
+    value: {
+      name: input.name.trim(),
+      module: input.module,
+      description: typeof input.description === 'string' ? input.description.trim() : '',
+      config: input.config,
+    },
+  };
+}
+
+module.exports = { validateAgent, validateDraftAgent, validateConfig, MODULES, STATUSES, LIMITS };

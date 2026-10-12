@@ -4,7 +4,7 @@
 //   draft     --publish--> published     (draft can also be edited)
 //   published --disable--> disabled
 //   disabled  = terminal in this MVP (cannot be edited, published, or test-run)
-const { validateAgent, MODULES, STATUSES } = require('../validators/agentValidator');
+const { validateAgent, validateDraftAgent, MODULES, STATUSES } = require('../validators/agentValidator');
 const { HttpError } = require('../middleware/errorHandler');
 
 function parseConfig(json) {
@@ -55,7 +55,7 @@ function createAgentService(db) {
     },
 
     create(input) {
-      const v = validateAgent(input);
+      const v = input?.saveDraft ? validateDraftAgent(input) : validateAgent(input);
       if (!v.valid) throw validationError('', v.errors);
       const now = new Date().toISOString();
       const { name, module, description, config } = v.value;
@@ -79,10 +79,11 @@ function createAgentService(db) {
         description: input.description ?? current.description,
         config: input.config ?? current.config,
       };
-      const v = validateAgent(merged);
+      const v = input.saveDraft ? validateDraftAgent(merged) : validateAgent(merged);
       if (!v.valid) throw validationError('', v.errors);
       const { name, module, description, config } = v.value;
-      updateStmt.run(name, module, description, JSON.stringify(config), new Date().toISOString(), id);
+      const now = new Date().toISOString();
+      updateStmt.run(name, module, description, JSON.stringify(config), now, id);
       return rowToAgent(getRow.get(id));
     },
 
@@ -105,7 +106,8 @@ function createAgentService(db) {
       if (row.status !== 'published') {
         throw new HttpError(409, 'INVALID_STATE', `Only published agents can be disabled (this agent is ${row.status}).`);
       }
-      disableStmt.run(new Date().toISOString(), id);
+      const now = new Date().toISOString();
+      disableStmt.run(now, id);
       return rowToAgent(getRow.get(id));
     },
   };

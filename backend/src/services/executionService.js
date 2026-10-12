@@ -20,10 +20,25 @@ function createExecutionService(db, agentService) {
   );
   const getRun = db.prepare('SELECT * FROM agent_runs WHERE id = ?');
   const getRuns = db.prepare('SELECT * FROM agent_runs WHERE agent_id = ? ORDER BY created_at DESC, id DESC');
-  const getAll = db.prepare(
-    `SELECT r.*, a.name AS agent_name, a.module AS agent_module
+  const getAllRuns = db.prepare(
+    `SELECT r.*, a.name AS agent_name, a.module AS agent_module,
+            'run' AS history_type, 'test-run' AS action
        FROM agent_runs r JOIN agents a ON a.id = r.agent_id
       ORDER BY r.created_at DESC, r.id DESC LIMIT ?`
+  );
+  const getAllWithCreations = db.prepare(
+    `SELECT * FROM (
+       SELECT r.*, a.name AS agent_name, a.module AS agent_module,
+              'run' AS history_type, 'test-run' AS action
+         FROM agent_runs r JOIN agents a ON a.id = r.agent_id
+       UNION ALL
+       SELECT a.id, a.id AS agent_id, NULL AS run_type, 'draft' AS status,
+              NULL AS trigger_data_json, NULL AS result_json, NULL AS error_message,
+              a.created_at, a.name AS agent_name, a.module AS agent_module,
+              'activity' AS history_type, 'created' AS action
+         FROM agents a
+     ) history
+     ORDER BY created_at DESC, id DESC LIMIT ?`
   );
 
   function map(row) {
@@ -79,8 +94,9 @@ function createExecutionService(db, agentService) {
       return getRuns.all(id).map(map);
     },
 
-    list(limit = 100) {
-      return getAll.all(Math.min(Math.max(Number(limit) || 100, 1), 250)).map(map);
+    list(limit = 100, includeActivities = false) {
+      const size = Math.min(Math.max(Number(limit) || 100, 1), 250);
+      return (includeActivities ? getAllWithCreations : getAllRuns).all(size).map(map);
     },
   };
 }

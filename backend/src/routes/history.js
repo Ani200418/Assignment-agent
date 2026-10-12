@@ -7,7 +7,7 @@ function historyRoutes(db) {
   const executions = createExecutionService(db, createAgentService(db));
   router.get('/', (req, res) => {
     const limit = typeof req.query.limit === 'string' ? req.query.limit : undefined;
-    res.json({ success: true, data: executions.list(limit) });
+    res.json({ success: true, data: executions.list(limit, true) });
   });
   return router;
 }

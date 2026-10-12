@@ -110,6 +110,12 @@ Base URL: `http://localhost:4000/api`. Every response is JSON in one of two shap
 | `GET /agents/:id/history` | Runs of one agent, newest first | 200 | 400, 404 |
 | `GET /history?limit=` | Runs of all agents, newest first (default 100, max 250) | 200 | |
 
+The builder sends `saveDraft: true` when the user clicks **Save Draft**. In
+that mode a draft may contain only the workflow steps completed so far; the
+stored partial configuration is restored when the draft is reopened. Requests
+without `saveDraft: true`, and all publish requests, require the complete
+module-specific configuration.
+
 Example `POST /api/agents` body:
 
 ```json

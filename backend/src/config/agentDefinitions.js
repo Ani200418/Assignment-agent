@@ -17,6 +17,7 @@ const dueCondition = () => ({ key: 'daysBeforeDue', label: 'Days before due date
 const SAMPLE_TASK = { id: 'TASK-1001', title: 'Prepare monthly compliance report', createdBy: 'Sample Manager', assignee: 'Sample User', dueDate: '2026-01-15' };
 const SAMPLE_DSC = { id: 'DSC-2001', holder: 'Sample User', certificateClass: 'Class 3', expiryDate: '2026-02-01' };
 const SAMPLE_LICENSE = { id: 'LIC-3001', name: 'Sample Trade License', owner: 'Sample Company', expiryDate: '2026-02-01' };
+const taskEvent = (event) => () => ({ event, task: SAMPLE_TASK });
 
 const MODULE_DEFINITIONS = {
   Task: {
@@ -26,6 +27,21 @@ const MODULE_DEFINITIONS = {
       { value: 'Task created', condition: null, sampleEvent: () => ({ event: 'Task created', task: SAMPLE_TASK }) },
       { value: 'Task assigned', condition: null, sampleEvent: () => ({ event: 'Task assigned', task: SAMPLE_TASK, assignedTo: SAMPLE_TASK.assignee }) },
       { value: 'Task due soon', condition: dueCondition(), sampleEvent: (c) => ({ event: 'Task due soon', task: SAMPLE_TASK, daysUntilDue: c.daysBeforeDue }) },
+      { value: 'Task Completed & Final Document Uploaded', condition: null, sampleEvent: taskEvent('Task Completed & Final Document Uploaded') },
+      { value: 'Comment Added', condition: null, sampleEvent: taskEvent('Comment Added') },
+      { value: 'Timesheet Log Added', condition: null, sampleEvent: taskEvent('Timesheet Log Added') },
+      { value: 'Expense Added', condition: null, sampleEvent: taskEvent('Expense Added') },
+      { value: 'Due Date Approaching', condition: dueCondition(), sampleEvent: (c) => ({ event: 'Due Date Approaching', task: SAMPLE_TASK, daysUntilDue: c.daysBeforeDue }) },
+      { value: 'Due Date Changed', condition: null, sampleEvent: taskEvent('Due Date Changed') },
+      { value: 'Priority Changed', condition: null, sampleEvent: taskEvent('Priority Changed') },
+      { value: 'Status Changed', condition: null, sampleEvent: taskEvent('Status Changed') },
+      { value: 'Task Completed', condition: null, sampleEvent: taskEvent('Task Completed') },
+      { value: 'Task Deleted', condition: null, sampleEvent: taskEvent('Task Deleted') },
+      { value: 'Task Sent for Review', condition: null, sampleEvent: taskEvent('Task Sent for Review') },
+      { value: 'Task Put on Hold', condition: null, sampleEvent: taskEvent('Task Put on Hold') },
+      { value: 'Sub-Status Changed', condition: null, sampleEvent: taskEvent('Sub-Status Changed') },
+      { value: 'Subtask Status Changed', condition: null, sampleEvent: taskEvent('Subtask Status Changed') },
+      { value: 'Files Uploaded', condition: null, sampleEvent: taskEvent('Files Uploaded') },
     ],
   },
   DSC: {

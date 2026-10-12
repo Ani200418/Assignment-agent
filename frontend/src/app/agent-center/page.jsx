@@ -74,7 +74,7 @@ export default function AgentCenter() {
 
         {notice && <div role={notice.type === 'error' ? 'alert' : 'status'} className={`mb-5 rounded-xl border p-3 text-sm ${noticeStyle}`}>{notice.text}</div>}
 
-        <div className="agent-tabs"><span className="selected">Modules</span><span>Trigger History</span></div>
+        <div className="agent-tabs"><span className="selected">Modules</span><Link href="/history">Trigger History</Link></div>
 
         <section className="module-table">
           {showInitialLoading || (loading && items.length === 0 && !error) ? (
@@ -97,7 +97,7 @@ export default function AgentCenter() {
                       <td><span className="module-icon">{m.icon}</span>{m.name}</td>
                       <td>{m.desc}</td>
                       <td><span className="active-pill">{loaded ? `${counts[m.name].active} Active ${m.name} Agents` : 'Loading...'}</span></td>
-                      <td><Link href="/agents/new" className="add-agent">Add Agents&nbsp; ＋</Link></td>
+                      <td><Link href={`/agents/new?module=${m.name}`} className="add-agent">Add Agents&nbsp; ＋</Link></td>
                     </tr>
                   ))}
                 </tbody>

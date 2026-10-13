@@ -9,18 +9,20 @@ export async function api(path, options = {}) {
       headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
       cache: 'no-store',
     });
-  } catch {
-    // fetch() only rejects when the server cannot be reached at all.
-    throw new Error(`Cannot reach the server at ${BASE}. Is the backend running?`);
+  } catch (error) {
+    // Browser fetch rejects for unreachable servers and blocked CORS requests.
+    const reason = error instanceof Error && error.message ? ` (${error.message})` : '';
+    throw new Error(`Network request failed for ${BASE}${path}${reason}. Check that the backend is running and CORS allows this frontend origin.`);
   }
   let payload;
   try {
     payload = await response.json();
   } catch {
-    throw new Error(`Server returned an invalid response (${response.status}).`);
+    throw new Error(`Server returned an invalid response for ${BASE}${path} (HTTP ${response.status}).`);
   }
   if (!response.ok || payload.success === false) {
-    throw new Error(payload.error?.message || `Request failed (${response.status}).`);
+    const message = payload.error?.message || `Request failed (HTTP ${response.status}).`;
+    throw new Error(`${message} [${response.status} ${response.statusText}]`);
   }
   return payload.data;
 }

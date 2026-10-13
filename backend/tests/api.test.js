@@ -43,6 +43,12 @@ describe('infrastructure', () => {
     assert.equal(r.body.data.database, 'connected');
   });
 
+  test('GET /api/agents returns the current agent list', async () => {
+    const r = await req(srv.base, 'GET', '/api/agents');
+    assert.equal(r.status, 200);
+    assert.deepEqual(r.body, { success: true, data: [] });
+  });
+
   test('unknown routes return a JSON 404', async () => {
     const r = await req(srv.base, 'GET', '/api/nope');
     assert.equal(r.status, 404);

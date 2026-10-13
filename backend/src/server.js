@@ -10,6 +10,17 @@ const server = app.listen(config.port, () => {
   console.log(`API running on http://localhost:${config.port}  (db: ${config.dbPath})`);
 });
 
+server.on('error', (err) => {
+  if (err.code === 'EADDRINUSE') {
+    console.error(`Cannot start the API: port ${config.port} is already in use.`);
+    console.error('Stop the existing Turia backend or set PORT in backend/.env to another available port.');
+  } else {
+    console.error('Cannot start the API:', err);
+  }
+  db.close();
+  process.exitCode = 1;
+});
+
 // Close cleanly on Ctrl+C so SQLite flushes everything to disk.
 function shutdown() {
   console.log('\nShutting down...');

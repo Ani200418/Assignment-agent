@@ -18,7 +18,9 @@ You can create, edit, save as draft, publish, disable and *simulate* agents, and
 
 - **Node.js 20 LTS or newer** and **npm** (check with `node -v` and `npm -v`).
 - `better-sqlite3` normally installs a prebuilt binary. If `npm install` in `backend/` fails while compiling it, install a build toolchain: Windows → *Visual Studio Build Tools* ("Desktop development with C++"); macOS → `xcode-select --install`; Linux → `sudo apt install build-essential python3`.
-- Ports **4000** (backend) and **3000** (frontend) free.
+- The backend uses port **4000** and the frontend uses port **3000** by default.
+If either port is occupied, identify the existing listener before changing or stopping
+anything; do not start duplicate backend instances.
 
 ## 2. Run it from a clean checkout
 
@@ -32,6 +34,9 @@ npm install
 npm run dev                 # or: npm start
 ```
 Check it: <http://localhost:4000/api/health> should return `{"success":true,"data":{"status":"ok","database":"connected",...}}`.
+The API endpoint is `/api/health`; `GET /api` returning 404 is expected because
+there is no route registered at the API prefix itself. Also verify the agent list:
+<http://localhost:4000/api/agents>.
 
 **Terminal 2: frontend**
 ```bash
@@ -42,7 +47,17 @@ npm run dev
 ```
 Open <http://localhost:3000> (it redirects to the Agent Center).
 
-Start the backend first. If it is not running, the frontend shows a clear "Cannot reach the server" message with a *Try again* button instead of crashing.
+Start the backend first. If the API request fails, the frontend shows the exact
+request URL and browser error details with a *Try again* button instead of
+claiming every failure means the backend is offline.
+
+To diagnose a local port conflict on macOS or Linux:
+```bash
+lsof -nP -iTCP:4000 -sTCP:LISTEN
+```
+If the listener is the existing Turia backend, use that instance or stop it
+gracefully before running another one. The backend also reports the conflicting
+port and a safe configuration alternative instead of failing silently.
 
 ### Production build of the frontend
 

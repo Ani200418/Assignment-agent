@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAgents, runAgentAction, setFilters } from '../../store/agentSlice';
-import { Shell, Status } from '../../components/Shell';
+import { Status } from '../../components/Shell';
 import { formatDate } from '../../lib/format';
 
 // Visual metadata for the three module cards. (Triggers/options live in the backend definitions.)
@@ -63,7 +63,7 @@ export default function AgentCenter() {
   const filtersActive = module !== 'All' || status !== 'All' || search.trim() !== '';
 
   return (
-    <Shell>
+    <>
       <div className="agent-overview">
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div>
@@ -107,6 +107,6 @@ export default function AgentCenter() {
           )}
         </section>
       </div>
-    </Shell>
+    </>
   );
 }

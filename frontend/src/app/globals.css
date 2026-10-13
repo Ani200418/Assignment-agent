@@ -3,19 +3,19 @@
 * { box-sizing: border-box; }
 body { margin: 0; background: #fff; color: var(--ink); font-family: Arial, Helvetica, sans-serif; }
 button, input, select, textarea { font: inherit; }
-.turia-app { min-width: 1040px; }
-.turia-topbar { height:61px; display:flex; align-items:center; gap:22px; padding:0 32px; border-bottom:1px solid var(--line); background:#fff; font-size:14px; white-space:nowrap; }
+.turia-app { min-height:100vh; overflow-x:hidden; }
+.turia-topbar { height:61px; display:flex; align-items:center; gap:22px; padding:0 32px; border-bottom:1px solid var(--line); background:#fff; font-size:14px; white-space:nowrap; overflow-x:auto; }
 .turia-brand { display:flex; align-items:center; gap:9px; width:188px; font-weight:600; }
 .turia-brand-mark { display:grid; place-items:center; width:30px; height:30px; border-radius:8px; color:#fff; background:#7151db; font-size:19px; }
-.turia-product-nav { display:flex; align-items:center; gap:22px; height:100%; color:#303038; }
+.turia-product-nav { display:flex; flex:0 0 auto; align-items:center; gap:22px; height:100%; color:#303038; }
 .turia-product-nav span, .turia-product-nav a { position:relative; display:flex; align-items:center; height:100%; color:inherit; text-decoration:none; }
 .turia-product-nav span.active, .turia-product-nav a.active { color:var(--violet); font-weight:700; border-bottom:3px solid var(--violet); }
 .turia-product-nav b { position:absolute; top:8px; right:-10px; min-width:16px; height:16px; border-radius:9px; background:#dc4c5b; color:#fff; text-align:center; font-size:10px; line-height:16px; }
-.turia-top-actions { margin-left:auto; display:flex; align-items:center; gap:15px; color:#34343b; }
+.turia-top-actions { display:flex; flex:0 0 auto; align-items:center; gap:15px; margin-left:auto; color:#34343b; }
 .turia-timer { border:1px solid #f4bbc4; border-radius:18px; padding:8px 13px; color:#d85c70; background:#fff5f6; font-weight:600; }
 .turia-search { border:1px solid var(--line); border-radius:18px; padding:8px 13px; color:#8a8990; }
 .turia-avatar { display:grid; place-items:center; width:34px; height:34px; border-radius:50%; color:#5bba9a; background:#e9f7f2; font-size:12px; font-weight:700; }
-.turia-rail { position:fixed; top:61px; bottom:0; left:0; width:90px; border-right:1px solid var(--line); background:#fff; display:flex; flex-direction:column; align-items:center; padding-top:12px; z-index:2; }
+.turia-rail { position:fixed; top:61px; bottom:0; left:0; width:90px; overflow-y:auto; border-right:1px solid var(--line); background:#fff; display:flex; flex-direction:column; align-items:center; padding:12px 0 20px; z-index:2; }
 .turia-rail span, .turia-rail a { width:74px; height:56px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; color:#50505a; text-decoration:none; }
 .turia-rail span i, .turia-rail a i { font-style:normal; font-size:18px; color:#77747e; }
 .turia-rail small { max-width:70px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; font-size:11px; font-weight:600; }

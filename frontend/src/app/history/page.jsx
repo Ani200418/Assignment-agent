@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Fragment, useCallback, useEffect, useState } from 'react';
 import { getHistory } from '../../services/agentApi';
-import { Shell, Status } from '../../components/Shell';
+import { Status } from '../../components/Shell';
 import { RunDetails } from '../../components/RunDetails';
 import { formatDateTime } from '../../lib/format';
 
@@ -18,7 +18,7 @@ export default function HistoryPage() {
   useEffect(() => { load(); }, [load]);
 
   return (
-    <Shell>
+    <>
       <div className="mx-auto max-w-6xl">
         <Link href="/agent-center" className="text-sm text-slate-500 hover:text-violet-700">← Agent Center</Link>
         <div className="mb-7 mt-5 flex flex-wrap items-end justify-between gap-3">
@@ -75,6 +75,6 @@ export default function HistoryPage() {
           )}
         </div>
       </div>
-    </Shell>
+    </>
   );
 }

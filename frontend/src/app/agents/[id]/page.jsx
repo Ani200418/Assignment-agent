@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import { disableAgent, getAgent, getAgentHistory, publishAgent, testRunAgent } from '../../../services/agentApi';
-import { Shell, Status } from '../../../components/Shell';
+import { Status } from '../../../components/Shell';
 import { RunDetails } from '../../../components/RunDetails';
 import { describeConditions, formatDateTime } from '../../../lib/format';
 
@@ -54,10 +54,10 @@ export default function AgentDetail() {
 
   if (!agent) {
     return (
-      <Shell>
+      <>
         <Link href="/agent-center" className="text-sm text-violet-700">← Agent Center</Link>
         <p role={error ? 'alert' : undefined} className="mt-6">{error || 'Loading agent…'}</p>
-      </Shell>
+      </>
     );
   }
 
@@ -68,7 +68,7 @@ export default function AgentDetail() {
   ];
 
   return (
-    <Shell>
+    <>
       <div className="mx-auto max-w-4xl">
         <Link href="/agent-center" className="text-sm text-slate-500 hover:text-violet-700">← Back to Agent Center</Link>
         <div className="mt-5 flex flex-wrap items-start justify-between gap-4">
@@ -142,6 +142,6 @@ export default function AgentDetail() {
           )}
         </section>
       </div>
-    </Shell>
+    </>
   );
 }

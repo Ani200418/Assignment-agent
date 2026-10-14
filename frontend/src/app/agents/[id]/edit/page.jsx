@@ -23,7 +23,7 @@ export default function EditAgentPage() {
     return (
       <>
         <Link href="/agent-center" className="text-sm text-violet-700">← Agent Center</Link>
-        <p role="alert" className="mt-6 rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{error}</p>
+        <div role="alert" className="mt-6 rounded-lg bg-rose-50 p-3 text-sm text-rose-700"><p>{error}</p><button type="button" onClick={() => { setError(''); setAgent(null); getAgent(id).then(setAgent).catch((e) => setError(e.message)); }} className="mt-3 rounded-lg bg-rose-600 px-4 py-2 font-semibold text-white">Try again</button></div>
       </>
     );
   }

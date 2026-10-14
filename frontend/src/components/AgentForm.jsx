@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { createAgent, getAgentDefinitions, publishAgent, updateAgent } from '../services/agentApi';
+import { FALLBACK_AGENT_DEFINITIONS } from '../config/agentDefinitions';
 
 const LIMITS = { name: 100, description: 500, message: 1000 };
 const STEPS = ['event', 'recipient', 'channel', 'action'];
@@ -84,15 +85,13 @@ function payload(form) {
 }
 
 export default function AgentForm({ agent = null }) {
-  const [defs, setDefs] = useState(null);
+  const [defs, setDefs] = useState(FALLBACK_AGENT_DEFINITIONS);
   const [error, setError] = useState('');
   const load = useCallback(() => {
     setError('');
     getAgentDefinitions().then(setDefs).catch((e) => setError(e.message));
   }, []);
   useEffect(() => { load(); }, [load]);
-  if (error) return <div role="alert" className="form-error"><strong>The agent form could not be loaded.</strong><p>{error}</p><button type="button" onClick={load}>Try again</button></div>;
-  if (!defs) return <p className="form-loading">Loading builder…</p>;
   const requested = typeof window === 'undefined' ? 'Task' : new URLSearchParams(window.location.search).get('module');
   const module = agent?.module || (defs.modules[requested] ? requested : 'Task');
   return <Builder defs={defs} agent={agent} initialModule={module} />;

@@ -47,9 +47,15 @@ npm run dev
 ```
 Open <http://localhost:3000> (it redirects to the Agent Center).
 
-Start the backend first. If the API request fails, the frontend shows the exact
-request URL and browser error details with a *Try again* button instead of
-claiming every failure means the backend is offline.
+The frontend can also be started on its own with `cd frontend && npm run dev`.
+In frontend-only mode the layout, navigation, Agent Center, history page, and
+new-agent builder remain available for UI preview. The builder uses its typed
+local definitions while the API is unavailable, but saving, publishing, editing,
+actions, and database-backed lists require the backend. Those operations show an
+actionable error and never pretend that data was saved. Start the backend when
+you need those operations. If an API request fails, the frontend shows an inline
+error with a *Try again* button rather than treating the failure as an empty
+database.
 
 To diagnose a local port conflict on macOS or Linux:
 ```bash

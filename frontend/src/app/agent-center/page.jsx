@@ -16,7 +16,7 @@ const STATUSES = ['draft', 'published', 'disabled'];
 
 export default function AgentCenter() {
   const dispatch = useDispatch();
-  const { items, loaded, loading, error, filters } = useSelector((s) => s.agents);
+  const { items, loaded, loading, error, userInitiatedError, filters } = useSelector((s) => s.agents);
   const { module, status, search } = filters;
   const [notice, setNotice] = useState(null); // { type: 'success' | 'error', text }
   const [busyId, setBusyId] = useState(null);
@@ -58,7 +58,7 @@ export default function AgentCenter() {
   }
 
   const showInitialLoading = !loaded && !error;
-  const showLoadError = error && items.length === 0;
+  const showLoadError = userInitiatedError && items.length === 0;
   const noticeStyle = notice?.type === 'error' ? 'border-rose-100 bg-rose-50 text-rose-800' : 'border-violet-100 bg-violet-50 text-violet-900';
   const filtersActive = module !== 'All' || status !== 'All' || search.trim() !== '';
 
@@ -82,12 +82,11 @@ export default function AgentCenter() {
           ) : showLoadError ? (
             <div role="alert" className="m-5 rounded-lg bg-rose-50 p-4 text-sm text-rose-700">
               <p className="font-semibold">Agents could not be loaded.</p>
-              <p className="mt-1">{error}</p>
-              <button type="button" onClick={() => dispatch(fetchAgents())} className="mt-3 rounded-lg bg-rose-600 px-4 py-2 font-semibold text-white">Try again</button>
+              <p className="mt-1">{userInitiatedError}</p>
+              <button type="button" onClick={() => dispatch(fetchAgents({ userInitiated: true }))} className="mt-3 rounded-lg bg-rose-600 px-4 py-2 font-semibold text-white">Try again</button>
             </div>
           ) : (
             <div className="overflow-x-auto">
-              {error && <p role="alert" className="m-5 rounded-lg bg-rose-50 p-3 text-sm text-rose-700">{error}</p>}
               <table className="w-full min-w-[720px] text-left text-sm">
                 <thead><tr>{['Module', 'Description', 'Active Task Agents', 'Action'].map((h) => <th key={h} scope="col">{h}</th>)}</tr>
                 </thead>
@@ -96,13 +95,13 @@ export default function AgentCenter() {
                     <tr key={m.name}>
                       <td><span className="module-icon">{m.icon}</span>{m.name}</td>
                       <td>{m.desc}</td>
-                      <td><span className="active-pill">{loaded ? `${counts[m.name].active} Active ${m.name} Agents` : 'Loading...'}</span></td>
+                      <td><span className="active-pill">{loaded ? `${counts[m.name].active} Active ${m.name} Agents` : 'Data unavailable'}</span></td>
                       <td><Link href={`/agents/new?module=${m.name}`} className="add-agent">Add Agents&nbsp; ＋</Link></td>
                     </tr>
                   ))}
                 </tbody>
               </table>
-              <div className="module-footer"><span>© 2026, Powered by <strong className="text-violet-600">TURIA</strong></span><span>1-3 of 3 &nbsp; ‹ &nbsp; ›</span></div>
+              <div className="module-footer"><span>© 2026, Powered by <strong className="text-violet-600">TURIA</strong></span><span>{loaded ? '1-3 of 3' : 'Agent data unavailable'} &nbsp; ‹ &nbsp; ›</span></div>
             </div>
           )}
         </section>

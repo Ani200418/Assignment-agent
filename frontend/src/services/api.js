@@ -11,17 +11,21 @@ export class ApiError extends Error {
 }
 
 export async function api(path, options = {}) {
+  const { userInitiated = false, ...requestOptions } = options;
   let response;
   try {
     response = await fetch(`${BASE}${path}`, {
-      ...options,
-      headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
+      ...requestOptions,
+      headers: { 'Content-Type': 'application/json', ...(requestOptions.headers || {}) },
       cache: 'no-store',
     });
   } catch (error) {
     // Browser fetch rejects for unreachable servers and blocked CORS requests.
     const reason = error instanceof Error && error.message ? ` (${error.message})` : '';
-    throw new ApiError(`Backend is unavailable. Start the backend server and try again.${reason}`, { network: true });
+    const message = userInitiated
+      ? 'Backend is unavailable. Please start the backend server and try again.'
+      : 'The requested data is currently unavailable.';
+    throw new ApiError(`${message}${userInitiated ? reason : ''}`, { network: true });
   }
   let payload;
   try {

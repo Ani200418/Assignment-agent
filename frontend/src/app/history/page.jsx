@@ -9,12 +9,16 @@ import { formatDateTime } from '../../lib/format';
 export default function HistoryPage() {
   const [runs, setRuns] = useState(null); // null = not loaded yet
   const [error, setError] = useState('');
+  const [userInitiated, setUserInitiated] = useState(false);
   const [openId, setOpenId] = useState(null);
 
   const load = useCallback(() => {
     setError('');
-    getHistory().then(setRuns).catch((e) => setError(e.message));
-  }, []);
+    getHistory({ userInitiated }).then(setRuns).catch((e) => {
+      setRuns([]);
+      setError(e.message);
+    });
+  }, [userInitiated]);
   useEffect(() => { load(); }, [load]);
 
   return (
@@ -27,11 +31,11 @@ export default function HistoryPage() {
             <h1 className="mt-2 text-3xl font-bold">Agent History</h1>
             <p className="mt-2 text-slate-500">Review agent activity and simulated execution outcomes. Nothing here was actually delivered.</p>
           </div>
-          <button type="button" onClick={load} className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold">Refresh</button>
+          <button type="button" onClick={() => { setUserInitiated(true); setRuns(null); }} className="rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-sm font-semibold">Refresh</button>
         </div>
 
         <div className="overflow-x-auto rounded-2xl border border-slate-200 bg-white shadow-sm">
-          {error ? (
+          {error && userInitiated ? (
             <div role="alert" className="m-5 rounded-lg bg-rose-50 p-4 text-sm text-rose-700">
               <p className="font-semibold">History could not be loaded.</p>
               <p className="mt-1">{error}</p>
@@ -39,6 +43,8 @@ export default function HistoryPage() {
             </div>
           ) : runs === null ? (
             <p className="p-12 text-center text-sm text-slate-500">Loading history…</p>
+          ) : error ? (
+            <p className="p-12 text-center text-sm text-slate-500">History data is unavailable.</p>
           ) : runs.length === 0 ? (
             <div className="p-12 text-center">
               <h2 className="font-semibold">No history yet</h2>
